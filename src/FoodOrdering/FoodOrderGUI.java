@@ -42,20 +42,34 @@ public class FoodOrderGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int i = 0;
                 double total = 0;
-                for(JCheckBox f: food) {
-                    if(f.isSelected()) {
-                        total+=prices[i];
+                try {
+                    boolean foodSelect = false;
+                    boolean discSelect = false;
+                    for (JCheckBox f : food) {
+                        if (f.isSelected()) {
+                            total += prices[i];
+                            foodSelect = true;
+                        }
+                        i++;
                     }
-                    i++;
-                }
-                i = 0;
-                for(JRadioButton d: discount) {
-                    if(d.isSelected()) {
-                        total = total - (total * rate[i]);
+                    if (!foodSelect) {
+                        throw new IllegalArgumentException("Order failed. Please select a food.");
                     }
-                    i++;
+                    i = 0;
+                    for (JRadioButton d : discount) {
+                        if (d.isSelected()) {
+                            total = total - (total * rate[i]);
+                            discSelect = true;
+                        }
+                        i++;
+                    }
+                    if (!discSelect) {
+                        throw new IllegalArgumentException("Order failed. Please select a discount.");
+                    }
+                    JOptionPane.showMessageDialog(panel1, String.format("The total price is Php %.2f", total));
+                } catch (IllegalArgumentException exception) {
+                    JOptionPane.showMessageDialog(panel1, exception.getMessage());
                 }
-                JOptionPane.showMessageDialog(panel1, String.format("The total price is Php %.2f", total));
             }
         });
     }
