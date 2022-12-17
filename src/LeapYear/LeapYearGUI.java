@@ -40,14 +40,18 @@ public class LeapYearGUI extends JFrame{
         leapYearGUI.setVisible(true);
     }
     public void checkLeapYear() {
-
+        try {
             int year = Integer.parseInt(tfYear.getText());
-
+            if(year<=0) {
+                throw new IllegalArgumentException();
+            }
             if (year % 4 == 0) {
                 JOptionPane.showMessageDialog(panel1, (year % 400 == 0 || year % 100 != 0) ? "Leap Year" : "Not a Leap Year");
             } else {
                 JOptionPane.showMessageDialog(panel1, "Not a Leap Year");
             }
-
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(panel1,"Invalid Input. \nPlease enter a valid year.");
+        }
     }
 }
