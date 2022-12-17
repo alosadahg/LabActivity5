@@ -25,19 +25,24 @@ public class SimpleCalcGUI extends JFrame{
         tfNumber1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                compute();
+                if(!tfNumber2.getText().equals("")) {
+                    compute();
+                }
             }
         });
         tfNumber2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                compute();
+                if(!tfNumber1.getText().equals("")) {
+                    compute();
+                }
             }
         });
-        cbOperations.addItemListener(new ItemListener() {
+        cbOperations.addActionListener(new ActionListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                compute();
+            public void actionPerformed(ActionEvent e) {
+                if(!tfNumber1.getText().equals("")&&!tfNumber2.getText().equals(""))
+                    compute();
             }
         });
     }
@@ -52,6 +57,7 @@ public class SimpleCalcGUI extends JFrame{
     }
 
     public void compute() {
+        try {
             double n1 = Double.parseDouble(tfNumber1.getText());
             double n2 = Double.parseDouble(tfNumber2.getText());
             double result = 0;
@@ -68,11 +74,19 @@ public class SimpleCalcGUI extends JFrame{
                     break;
                 case 3:
                     result = n1 / n2;
+                    if(n2==0) {
+                        throw new ArithmeticException();
+                    }
                     break;
             }
             if (result % 1 == 0)
                 lblResult.setText(String.valueOf(String.format("%.0f", result)));
             else
                 lblResult.setText(String.valueOf(String.format("%.2f", result)));
-    };
+        } catch (IllegalArgumentException i) {
+            JOptionPane.showMessageDialog(panel1, "Invalid input.\nPlease enter a number.");
+        } catch (ArithmeticException a) {
+            JOptionPane.showMessageDialog(panel1, "Invalid operation.");
+        }
+    }
 }
